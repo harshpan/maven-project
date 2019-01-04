@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     stages{
@@ -13,26 +12,31 @@ pipeline {
                 }
             }
         }
-        stage('DeployToStage'){
+        stage ('Deploy to Staging'){
             steps {
-                    build job: 'DeployArtifactStagingTomcat'
+                build job: 'Deploy-to-staging'
             }
         }
-        stage('DeployToProd'){
-            steps {
+
+        stage ('Deploy to Production'){
+            steps{
                 timeout(time:5, unit:'DAYS'){
-                input message: 'Approve for deployment'
+                    input message:'Approve PRODUCTION Deployment?'
                 }
-              build job: 'DeployArtifactProdTomcat'
+
+                build job: 'Deploy-to-Prod'
             }
             post {
-                success{
-                    echo "its passed"
+                success {
+                    echo 'Code deployed to Production.'
                 }
-                failure{
-                    
-                    echo "FAILED"
+
+                failure {
+                    echo ' Deployment failed.'
+                }
             }
-        }       
+        }
+
+
     }
 }
