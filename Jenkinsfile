@@ -13,5 +13,10 @@ pipeline {
                 }
             }
         }
+        stage('DeployToStage'){
+            steps {
+                    build job: 'DeployArtifactStagingTomcat'
+            }
+        }
     }
 }
